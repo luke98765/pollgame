@@ -438,6 +438,29 @@
           </div>
         </div>
 
+        <div class="form-group" style="border:1px solid var(--line);border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+          <label class="form-label" style="margin-bottom:.75rem;display:block">Export / Import questions</label>
+          <p style="font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:1rem">
+            Export saves your current questions as a <code style="font-family:var(--mono);font-size:11px">.json</code> file.
+            To push questions to your live site, paste that JSON into the <code style="font-family:var(--mono);font-size:11px">DEFAULT_QUESTIONS</code> array in <code style="font-family:var(--mono);font-size:11px">index.html</code> and re-upload to GitHub.
+            Import loads a previously exported file into this browser.
+          </p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="inline-btn" onclick="exportQuestions()">↓ Export JSON</button>
+            <label class="inline-btn" style="cursor:pointer">
+              ↑ Import JSON
+              <input type="file" id="import-input" accept=".json" style="display:none" onchange="importQuestions(event)">
+            </label>
+          </div>
+          <div id="import-preview" style="display:none;margin-top:1rem;padding:1rem;background:var(--accent-bg);border-radius:8px;border:1px solid var(--accent)">
+            <div style="font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:.75rem" id="import-summary"></div>
+            <div style="display:flex;gap:8px">
+              <button class="save-btn" style="flex:1" onclick="confirmImport()">Replace all &amp; import</button>
+              <button class="inline-btn" onclick="cancelImport()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
         <div class="danger-zone">
           <h3>DANGER ZONE</h3>
           <p>This will permanently delete all questions from localStorage. You cannot undo this.</p>
@@ -792,6 +815,61 @@ function clearAll() {
   renderQuestionList();
   flash('settings-flash', 'All questions cleared.');
   initGame();
+}
+
+/* ━━━━━━━━━━ EXPORT / IMPORT ━━━━━━━━━━ */
+function exportQuestions() {
+  const qs = getQuestions();
+  const json = JSON.stringify(qs, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'poll-position-questions.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  flash('settings-flash', 'Exported ' + qs.length + ' question' + (qs.length !== 1 ? 's' : '') + '.');
+}
+
+let pendingImport = null;
+
+function importQuestions(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) throw new Error('Not an array');
+      const valid = data.filter(q => q.q && q.answer !== undefined);
+      if (valid.length === 0) throw new Error('No valid questions found');
+      pendingImport = valid;
+      document.getElementById('import-summary').textContent =
+        'Ready to import ' + valid.length + ' question' + (valid.length !== 1 ? 's' : '') + ' — this will replace your current set.';
+      document.getElementById('import-preview').style.display = 'block';
+    } catch(err) {
+      flash('settings-flash', 'Invalid file. Make sure it\'s an exported Poll Position JSON.', 'error');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function confirmImport() {
+  if (!pendingImport) return;
+  const maxId = pendingImport.reduce(function(m, q) { return Math.max(m, q.id || 0); }, 0);
+  pendingImport.forEach(function(q, i) { if (!q.id) q.id = maxId + i + 1; });
+  saveQuestions(pendingImport);
+  pendingImport = null;
+  document.getElementById('import-preview').style.display = 'none';
+  renderQuestionList();
+  flash('settings-flash', 'Questions imported successfully.');
+  initGame();
+}
+
+function cancelImport() {
+  pendingImport = null;
+  document.getElementById('import-preview').style.display = 'none';
 }
 
 /* ━━━━━━━━━━ BOOT ━━━━━━━━━━ */
