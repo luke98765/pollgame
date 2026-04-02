@@ -7,386 +7,262 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #1a1a1a; --ink2: #555; --ink3: #999;
+  --bg: #f8f7f2; --card: #fff; --line: #e8e6df;
+  --accent: #1a56db; --accent-bg: #eff4ff;
+  --yes: #0f7b55; --yes-bg: #ecfdf5;
+  --no: #c0392b; --no-bg: #fef2f2;
+  --mono: 'DM Mono', monospace;
+  --serif: 'DM Serif Display', serif;
+  --sans: 'DM Sans', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
   :root {
-    --ink: #1a1a1a; --ink2: #555; --ink3: #999;
-    --bg: #f8f7f2; --card: #fff; --line: #e8e6df;
-    --accent: #1a56db; --accent-bg: #eff4ff;
-    --yes: #0f7b55; --yes-bg: #ecfdf5;
-    --no: #c0392b; --no-bg: #fef2f2;
-    --warn: #b45309; --warn-bg: #fffbeb;
-    --mono: 'DM Mono', monospace;
-    --serif: 'DM Serif Display', serif;
-    --sans: 'DM Sans', sans-serif;
+    --ink: #f0ede6; --ink2: #a8a49c; --ink3: #555;
+    --bg: #141412; --card: #1e1d1a; --line: #2e2d2a;
+    --accent: #6b97f8; --accent-bg: #1a2340;
+    --yes: #34d399; --yes-bg: #0a2a1e;
+    --no: #f87171; --no-bg: #2a0f0f;
   }
+}
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-height: 100vh; padding: 2rem 1rem 5rem; }
+.wrap { max-width: 640px; margin: 0 auto; }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --ink: #f0ede6; --ink2: #a8a49c; --ink3: #555;
-      --bg: #141412; --card: #1e1d1a; --line: #2e2d2a;
-      --accent: #6b97f8; --accent-bg: #1a2340;
-      --yes: #34d399; --yes-bg: #0a2a1e;
-      --no: #f87171; --no-bg: #2a0f0f;
-      --warn: #fbbf24; --warn-bg: #2a1f05;
-    }
-  }
+/* MASTHEAD */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end; }
+.masthead h1 { font-family: var(--serif); font-size: 30px; font-weight: 400; letter-spacing: -0.5px; }
+.masthead p { font-size: 12px; color: var(--ink3); margin-top: 4px; font-family: var(--mono); }
+.admin-btn { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 0.5px; border: 1px solid var(--line); padding: 5px 11px; border-radius: 5px; cursor: pointer; background: transparent; transition: all 0.15s; }
+.admin-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-bg); }
 
-  body {
-    font-family: var(--sans);
-    background: var(--bg);
-    color: var(--ink);
-    min-height: 100vh;
-    padding: 2rem 1rem 4rem;
-  }
+/* PROGRESS */
+.progress-bar { height: 3px; background: var(--line); border-radius: 2px; margin-bottom: 2rem; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.5s ease; border-radius: 2px; width: 0%; }
 
-  .wrap { max-width: 640px; margin: 0 auto; }
+/* USERNAME SCREEN */
+.username-screen { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 2.5rem 2rem; text-align: center; }
+.username-screen h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin-bottom: .5rem; }
+.username-screen p { font-size: 14px; color: var(--ink2); margin-bottom: 1.75rem; line-height: 1.6; }
+.username-row { display: flex; gap: 8px; max-width: 320px; margin: 0 auto .75rem; }
+.username-row input { flex: 1; padding: 11px 14px; border: 1px solid var(--line); border-radius: 8px; font-family: var(--sans); font-size: 15px; background: var(--bg); color: var(--ink); outline: none; transition: border-color .15s; text-align: center; }
+.username-row input:focus { border-color: var(--accent); }
+.username-err { font-size: 12px; color: var(--no); font-family: var(--mono); min-height: 18px; margin-bottom: .5rem; }
+.start-btn { padding: 11px 32px; background: var(--ink); color: var(--bg); border: none; border-radius: 8px; font-family: var(--sans); font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+.start-btn:hover { opacity: .85; }
+.ghost-btn { display: block; width: 100%; max-width: 320px; margin: 1rem auto 0; padding: 10px; background: transparent; color: var(--ink2); border: 1px solid var(--line); border-radius: 8px; font-family: var(--sans); font-size: 13px; cursor: pointer; transition: all .15s; }
+.ghost-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
 
-  /* ── MASTHEAD ── */
-  .masthead {
-    border-bottom: 2px solid var(--ink);
-    padding-bottom: 1rem;
-    margin-bottom: 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  }
-  .masthead h1 { font-family: var(--serif); font-size: 30px; font-weight: 400; letter-spacing: -0.5px; }
-  .masthead p { font-size: 12px; color: var(--ink3); margin-top: 4px; font-family: var(--mono); }
-  .admin-link {
-    font-family: var(--mono); font-size: 11px; color: var(--ink3);
-    text-decoration: none; letter-spacing: 0.5px;
-    border: 1px solid var(--line); padding: 4px 10px; border-radius: 4px;
-    cursor: pointer; background: transparent; transition: all 0.15s;
-  }
-  .admin-link:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-bg); }
+/* LEADERBOARD PAGE */
+.lb-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem; }
+.lb-title { font-family: var(--serif); font-size: 22px; font-weight: 400; }
+.lb-sub { font-family: var(--mono); font-size: 11px; color: var(--ink3); }
+.lb-table { width: 100%; border-collapse: collapse; }
+.lb-table th { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: .5px; text-transform: uppercase; text-align: left; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.lb-table th:last-child { text-align: right; }
+.lb-table td { padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle; }
+.lb-table td:last-child { text-align: right; font-family: var(--mono); font-weight: 500; }
+.lb-table tr:last-child td { border-bottom: none; }
+.lb-rank { font-family: var(--mono); font-size: 12px; color: var(--ink3); width: 32px; }
+.lb-name { font-weight: 500; }
+.lb-date { font-size: 12px; color: var(--ink3); font-family: var(--mono); }
+.m1 { color: #b8860b; } .m2 { color: #808080; } .m3 { color: #8b5e3c; }
+.sc-good { color: var(--yes); } .sc-ok { color: var(--accent); } .sc-bad { color: var(--no); }
+.lb-empty { text-align: center; padding: 3rem 1rem; color: var(--ink3); font-size: 13px; font-family: var(--mono); }
+.del-entry { margin-left: 8px; font-size: 10px; font-family: var(--mono); padding: 2px 6px; border: 1px solid var(--line); border-radius: 4px; cursor: pointer; background: transparent; color: var(--ink3); transition: all .15s; }
+.del-entry:hover { background: var(--no-bg); color: var(--no); border-color: var(--no); }
 
-  /* ── PROGRESS ── */
-  .progress-bar { height: 3px; background: var(--line); border-radius: 2px; margin-bottom: 2rem; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--accent); transition: width 0.5s ease; border-radius: 2px; }
+/* GAME */
+.q-label { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: .5rem; }
+.question { font-family: var(--serif); font-size: 22px; line-height: 1.4; margin-bottom: .5rem; font-weight: 400; }
+.q-source { font-size: 12px; color: var(--ink3); font-family: var(--mono); margin-bottom: 2rem; }
+.input-zone { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+.input-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+.input-header label { font-size: 13px; color: var(--ink2); }
+.guess-display { font-family: var(--mono); font-size: 32px; font-weight: 500; color: var(--accent); }
+input[type=range] { width: 100%; accent-color: var(--accent); margin-bottom: 1rem; cursor: pointer; }
+.tick-row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink3); }
+.submit-btn { width: 100%; padding: 14px; background: var(--ink); color: var(--bg); border: none; border-radius: 8px; font-family: var(--sans); font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+.submit-btn:hover { opacity: .85; }
+.submit-btn:disabled { opacity: .4; cursor: default; }
 
-  /* ── GAME ── */
-  .q-label { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: .5rem; }
-  .question { font-family: var(--serif); font-size: 22px; line-height: 1.4; margin-bottom: .5rem; font-weight: 400; }
-  .q-source { font-size: 12px; color: var(--ink3); font-family: var(--mono); margin-bottom: 2rem; }
+/* REVEAL */
+.reveal { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.5rem; margin-top: 1rem; }
+.reveal.show { display: block; }
+.bars { margin: 1.25rem 0; }
+.bar-row { margin-bottom: 12px; }
+.bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+.bar-label span:first-child { color: var(--ink2); }
+.bar-label span:last-child { font-family: var(--mono); font-weight: 500; }
+.bar-track { background: var(--line); border-radius: 4px; height: 10px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; width: 0; transition: width 0.8s cubic-bezier(.4,0,.2,1); }
+.bar-guess .bar-fill { background: var(--accent); }
+.bar-answer .bar-fill { background: var(--yes); }
+.verdict { display: flex; align-items: center; gap: 12px; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+.verdict.close { background: var(--yes-bg); color: var(--yes); }
+.verdict.far { background: var(--no-bg); color: var(--no); }
+.verdict.exact { background: var(--yes-bg); color: var(--yes); }
+.verdict-num { font-family: var(--mono); font-size: 28px; font-weight: 500; flex-shrink: 0; }
+.verdict-text { font-size: 14px; line-height: 1.4; }
+.q-context { font-size: 13px; color: var(--ink2); margin-top: 1rem; line-height: 1.6; padding-top: 1rem; border-top: 1px solid var(--line); }
+.q-context a { color: var(--accent); text-decoration: none; }
+.q-context a:hover { text-decoration: underline; }
+.next-btn { width: 100%; padding: 12px; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 8px; font-family: var(--sans); font-size: 15px; font-weight: 500; cursor: pointer; transition: all .15s; margin-top: .75rem; }
+.next-btn:hover { background: var(--accent-bg); }
 
-  .input-zone {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;
-  }
-  .input-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
-  .input-header label { font-size: 13px; color: var(--ink2); }
-  .guess-display { font-family: var(--mono); font-size: 32px; font-weight: 500; color: var(--accent); }
+/* SCOREBOARD */
+.scoreboard { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 2rem; text-align: center; }
+.scoreboard.show { display: block; }
+.score-title { font-family: var(--serif); font-size: 26px; font-weight: 400; margin-bottom: .25rem; }
+.score-name { font-family: var(--mono); font-size: 12px; color: var(--ink3); margin-bottom: 1rem; }
+.score-num { font-family: var(--mono); font-size: 60px; font-weight: 500; color: var(--accent); line-height: 1; }
+.score-unit { font-size: 13px; color: var(--ink2); font-family: var(--mono); margin-bottom: .5rem; }
+.score-grade { font-family: var(--serif); font-size: 18px; color: var(--ink2); margin-bottom: 1.75rem; font-weight: 400; }
+.score-rows { text-align: left; border-top: 1px solid var(--line); padding-top: 1rem; margin-bottom: 1.5rem; }
+.score-row { display: flex; align-items: baseline; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.score-row:last-child { border-bottom: none; }
+.sr-q { flex: 1; color: var(--ink2); font-size: 12px; }
+.sr-guess { font-family: var(--mono); color: var(--ink3); font-size: 12px; }
+.sr-ans { font-family: var(--mono); font-size: 12px; color: var(--ink2); }
+.sr-diff { font-family: var(--mono); font-weight: 500; min-width: 36px; text-align: right; font-size: 13px; }
+.score-actions { display: flex; gap: 8px; }
+.score-actions button { flex: 1; padding: 12px; border-radius: 8px; font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: all .15s; }
+.btn-primary { background: var(--ink); color: var(--bg); border: none; }
+.btn-primary:hover { opacity: .85; }
+.btn-outline { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+.btn-outline:hover { background: var(--accent-bg); }
 
-  input[type=range] { width: 100%; accent-color: var(--accent); margin-bottom: 1rem; cursor: pointer; }
-  .tick-row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink3); }
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 4rem 2rem; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+.empty-state h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; margin-bottom: .75rem; }
+.empty-state p { color: var(--ink2); font-size: 14px; line-height: 1.6; }
 
-  .submit-btn {
-    width: 100%; padding: 14px; background: var(--ink); color: var(--bg);
-    border: none; border-radius: 8px; font-family: var(--sans);
-    font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity .15s;
-  }
-  .submit-btn:hover { opacity: .85; }
-  .submit-btn:disabled { opacity: .4; cursor: default; }
+/* ADMIN OVERLAY */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: flex-start; justify-content: center; padding: 1.5rem 1rem; overflow-y: auto; }
+.overlay.show { display: flex; }
+.modal { background: var(--bg); border-radius: 16px; border: 1px solid var(--line); width: 100%; max-width: 560px; padding: 2rem; margin: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.modal-header h2 { font-family: var(--serif); font-size: 22px; font-weight: 400; }
+.modal-close { background: none; border: none; cursor: pointer; color: var(--ink3); font-size: 20px; line-height: 1; padding: 4px; }
+.modal-close:hover { color: var(--ink); }
 
-  .reveal {
-    display: none; background: var(--card); border: 1px solid var(--line);
-    border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;
-  }
-  .reveal.show { display: block; }
+/* AUTH */
+.auth-box { text-align: center; padding: .5rem 0 1rem; }
+.auth-box p { color: var(--ink2); font-size: 14px; margin-bottom: 1.25rem; line-height: 1.5; }
+.auth-box input { width: 100%; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; font-family: var(--mono); font-size: 14px; background: var(--card); color: var(--ink); margin-bottom: .75rem; outline: none; transition: border-color .15s; }
+.auth-box input:focus { border-color: var(--accent); }
+.auth-error { color: var(--no); font-size: 12px; font-family: var(--mono); margin-bottom: .75rem; display: none; }
+.auth-error.show { display: block; }
+.auth-btn { width: 100%; padding: 11px; background: var(--ink); color: var(--bg); border: none; border-radius: 8px; font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; }
 
-  .bars { margin: 1.5rem 0; }
-  .bar-row { margin-bottom: 12px; }
-  .bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
-  .bar-label span:first-child { color: var(--ink2); }
-  .bar-label span:last-child { font-family: var(--mono); font-weight: 500; }
-  .bar-track { background: var(--line); border-radius: 4px; height: 10px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 4px; width: 0; transition: width 0.8s cubic-bezier(.4,0,.2,1); }
-  .bar-guess .bar-fill { background: var(--accent); }
-  .bar-answer .bar-fill { background: var(--yes); }
+/* ADMIN TABS */
+.admin-tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.admin-tab { padding: 6px 14px; border: 1px solid var(--line); border-radius: 6px; font-family: var(--mono); font-size: 12px; cursor: pointer; background: transparent; color: var(--ink2); transition: all .15s; }
+.admin-tab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
-  .verdict { display: flex; align-items: center; gap: 12px; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
-  .verdict.close { background: var(--yes-bg); color: var(--yes); }
-  .verdict.far { background: var(--no-bg); color: var(--no); }
-  .verdict.exact { background: var(--yes-bg); color: var(--yes); }
-  .verdict-num { font-family: var(--mono); font-size: 28px; font-weight: 500; }
-  .verdict-text { font-size: 14px; line-height: 1.4; }
+/* QUESTION LIST */
+.q-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
+.q-item { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 1rem; display: flex; gap: 12px; align-items: flex-start; }
+.q-item-body { flex: 1; min-width: 0; }
+.q-item-text { font-size: 13px; line-height: 1.4; margin-bottom: 5px; }
+.q-item-meta { font-family: var(--mono); font-size: 11px; color: var(--ink3); }
+.q-item-actions { display: flex; gap: 5px; flex-shrink: 0; }
+.q-btn { padding: 5px 10px; border-radius: 5px; font-family: var(--mono); font-size: 11px; cursor: pointer; border: 1px solid var(--line); background: transparent; color: var(--ink2); transition: all .15s; }
+.q-btn:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+.q-btn.del:hover { background: var(--no-bg); color: var(--no); border-color: var(--no); }
+.no-qs { text-align: center; padding: 2.5rem; color: var(--ink3); font-size: 13px; font-family: var(--mono); }
+.edit-form { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.edit-form.open { display: block; }
 
-  .q-context {
-    font-size: 13px; color: var(--ink2); margin-top: 1rem; line-height: 1.6;
-    padding-top: 1rem; border-top: 1px solid var(--line);
-  }
+/* FORMS */
+.form-group { margin-bottom: 1.1rem; }
+.form-label { font-size: 11px; color: var(--ink2); font-family: var(--mono); display: block; margin-bottom: 5px; letter-spacing: .5px; text-transform: uppercase; }
+.form-input, .form-textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 7px; font-family: var(--sans); font-size: 13px; background: var(--card); color: var(--ink); outline: none; transition: border-color .15s; resize: vertical; }
+.form-input:focus, .form-textarea:focus { border-color: var(--accent); }
+.form-row { display: flex; gap: 10px; }
+.form-row .form-group { flex: 1; }
+.form-hint { font-size: 11px; color: var(--ink3); font-family: var(--mono); margin-top: 3px; }
+.save-btn { width: 100%; padding: 11px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-family: var(--sans); font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s; }
+.save-btn:hover { opacity: .9; }
+.inline-row { display: flex; gap: 8px; }
+.inline-row .form-input { flex: 1; }
+.inline-btn { padding: 9px 14px; background: var(--ink); color: var(--bg); border: none; border-radius: 7px; font-family: var(--mono); font-size: 12px; cursor: pointer; white-space: nowrap; transition: opacity .15s; }
+.inline-btn:hover { opacity: .85; }
+.file-label { display: inline-block; padding: 9px 14px; background: var(--ink); color: var(--bg); border-radius: 7px; font-family: var(--mono); font-size: 12px; cursor: pointer; transition: opacity .15s; }
+.file-label:hover { opacity: .85; }
 
-  .next-btn {
-    width: 100%; padding: 12px; background: transparent; color: var(--accent);
-    border: 1.5px solid var(--accent); border-radius: 8px; font-family: var(--sans);
-    font-size: 15px; font-weight: 500; cursor: pointer; transition: all .15s; margin-top: .75rem;
-  }
-  .next-btn:hover { background: var(--accent-bg); }
+/* FLASH */
+.flash { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem; font-family: var(--mono); display: none; }
+.flash.success { background: var(--yes-bg); color: var(--yes); display: block; }
+.flash.error { background: var(--no-bg); color: var(--no); display: block; }
 
-  /* ── SCOREBOARD ── */
-  .scoreboard {
-    display: none; background: var(--card); border: 1px solid var(--line);
-    border-radius: 12px; padding: 2rem; text-align: center;
-  }
-  .scoreboard.show { display: block; }
-  .score-title { font-family: var(--serif); font-size: 26px; margin-bottom: .5rem; font-weight: 400; }
-  .score-grade { font-family: var(--serif); font-size: 18px; color: var(--ink2); margin-bottom: 1.5rem; }
-  .score-num { font-family: var(--mono); font-size: 60px; font-weight: 500; color: var(--accent); line-height: 1; }
-  .score-unit { font-size: 13px; color: var(--ink2); margin-bottom: 2rem; font-family: var(--mono); }
-  .score-rows { text-align: left; border-top: 1px solid var(--line); padding-top: 1rem; }
-  .score-row { display: flex; align-items: baseline; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
-  .score-row:last-child { border-bottom: none; }
-  .score-row .sr-q { flex: 1; color: var(--ink2); font-size: 12px; }
-  .score-row .sr-guess { font-family: var(--mono); color: var(--ink3); font-size: 12px; }
-  .score-row .sr-ans { font-family: var(--mono); font-size: 12px; }
-  .score-row .diff { font-family: var(--mono); font-weight: 500; min-width: 36px; text-align: right; }
-  .diff.good { color: var(--yes); } .diff.bad { color: var(--no); } .diff.ok { color: var(--accent); }
-  .restart-btn {
-    margin-top: 1.5rem; padding: 12px 28px; background: var(--ink); color: var(--bg);
-    border: none; border-radius: 8px; font-family: var(--sans); font-size: 14px; cursor: pointer;
-    transition: opacity .15s;
-  }
-  .restart-btn:hover { opacity: .85; }
+/* IMPORT PREVIEW */
+.import-preview { display: none; margin-top: 1rem; padding: 1rem; background: var(--accent-bg); border-radius: 8px; border: 1px solid var(--accent); }
+.import-preview-text { font-family: var(--mono); font-size: 12px; color: var(--accent); margin-bottom: .75rem; }
+.import-actions { display: flex; gap: 8px; }
 
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    text-align: center; padding: 4rem 2rem;
-    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-  }
-  .empty-state h2 { font-family: var(--serif); font-weight: 400; font-size: 22px; margin-bottom: .75rem; }
-  .empty-state p { color: var(--ink2); font-size: 14px; line-height: 1.6; }
-
-  /* ── MODAL OVERLAY ── */
-  .overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.55); z-index: 100;
-    align-items: center; justify-content: center; padding: 1rem;
-  }
-  .overlay.show { display: flex; }
-
-  .modal {
-    background: var(--bg); border-radius: 16px; border: 1px solid var(--line);
-    width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto;
-    padding: 2rem;
-  }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-  .modal-header h2 { font-family: var(--serif); font-size: 22px; font-weight: 400; }
-  .modal-close {
-    background: none; border: none; cursor: pointer; color: var(--ink3);
-    font-size: 20px; line-height: 1; padding: 4px;
-  }
-  .modal-close:hover { color: var(--ink); }
-
-  /* ── ADMIN AUTH ── */
-  .auth-box { text-align: center; padding: 1rem 0; }
-  .auth-box p { color: var(--ink2); font-size: 14px; margin-bottom: 1.5rem; line-height: 1.5; }
-  .auth-box input {
-    width: 100%; padding: 10px 14px; border: 1px solid var(--line);
-    border-radius: 8px; font-family: var(--mono); font-size: 14px;
-    background: var(--card); color: var(--ink); margin-bottom: .75rem;
-    outline: none; transition: border-color .15s;
-  }
-  .auth-box input:focus { border-color: var(--accent); }
-  .auth-error { color: var(--no); font-size: 12px; font-family: var(--mono); margin-bottom: .75rem; display: none; }
-  .auth-error.show { display: block; }
-  .auth-btn {
-    width: 100%; padding: 11px; background: var(--ink); color: var(--bg);
-    border: none; border-radius: 8px; font-family: var(--sans);
-    font-size: 14px; font-weight: 500; cursor: pointer;
-  }
-
-  /* ── ADMIN PANEL ── */
-  .admin-tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; }
-  .admin-tab {
-    padding: 7px 16px; border: 1px solid var(--line); border-radius: 6px;
-    font-family: var(--mono); font-size: 12px; cursor: pointer;
-    background: transparent; color: var(--ink2); transition: all .15s;
-  }
-  .admin-tab.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  .question-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
-  .q-item {
-    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-    padding: 1rem; display: flex; gap: 12px; align-items: flex-start;
-  }
-  .q-item-body { flex: 1; min-width: 0; }
-  .q-item-text { font-size: 13px; color: var(--ink); margin-bottom: 6px; line-height: 1.4; }
-  .q-item-meta { font-family: var(--mono); font-size: 11px; color: var(--ink3); }
-  .q-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
-  .q-btn {
-    padding: 5px 10px; border-radius: 5px; font-family: var(--mono); font-size: 11px;
-    cursor: pointer; border: 1px solid var(--line); background: transparent;
-    color: var(--ink2); transition: all .15s;
-  }
-  .q-btn:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
-  .q-btn.del:hover { background: var(--no-bg); color: var(--no); border-color: var(--no); }
-
-  .form-group { margin-bottom: 1.25rem; }
-  .form-label { font-size: 12px; color: var(--ink2); font-family: var(--mono); display: block; margin-bottom: 6px; letter-spacing: 0.5px; }
-  .form-input, .form-textarea {
-    width: 100%; padding: 10px 14px; border: 1px solid var(--line);
-    border-radius: 8px; font-family: var(--sans); font-size: 14px;
-    background: var(--card); color: var(--ink); outline: none;
-    transition: border-color .15s; resize: vertical;
-  }
-  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
-  .form-row { display: flex; gap: 12px; }
-  .form-row .form-group { flex: 1; }
-  .form-hint { font-size: 11px; color: var(--ink3); font-family: var(--mono); margin-top: 4px; }
-
-  .save-btn {
-    width: 100%; padding: 12px; background: var(--accent); color: #fff;
-    border: none; border-radius: 8px; font-family: var(--sans);
-    font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .15s;
-  }
-  .save-btn:hover { opacity: .9; }
-
-  .danger-zone {
-    border: 1px solid var(--no); border-radius: 10px; padding: 1.25rem; margin-top: 1.5rem;
-  }
-  .danger-zone h3 { font-size: 13px; color: var(--no); font-family: var(--mono); margin-bottom: .75rem; letter-spacing: 0.5px; }
-  .danger-zone p { font-size: 12px; color: var(--ink2); margin-bottom: 1rem; line-height: 1.5; }
-  .danger-btn {
-    padding: 9px 16px; background: var(--no-bg); color: var(--no);
-    border: 1px solid var(--no); border-radius: 6px; font-family: var(--mono);
-    font-size: 12px; cursor: pointer; transition: opacity .15s;
-  }
-  .danger-btn:hover { opacity: .8; }
-
-  .pw-section { margin-bottom: 1.5rem; }
-  .inline-row { display: flex; gap: 8px; }
-  .inline-row .form-input { flex: 1; }
-  .inline-btn {
-    padding: 10px 16px; background: var(--ink); color: var(--bg);
-    border: none; border-radius: 8px; font-family: var(--mono);
-    font-size: 12px; cursor: pointer; white-space: nowrap;
-  }
-
-  .flash {
-    padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 1rem;
-    font-family: var(--mono); display: none;
-  }
-  .flash.success { background: var(--yes-bg); color: var(--yes); display: block; }
-  .flash.error { background: var(--no-bg); color: var(--no); display: block; }
-
-  .no-qs { text-align: center; padding: 2rem; color: var(--ink3); font-size: 13px; font-family: var(--mono); }
-
-  /* ── EDIT FORM IN LIST ── */
-  .edit-form {
-    display: none; margin-top: 12px; padding-top: 12px;
-    border-top: 1px solid var(--line);
-  }
-  .edit-form.open { display: block; }
-
-  /* ── USERNAME SCREEN ── */
-  .username-screen {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: 12px; padding: 2.5rem 2rem; text-align: center;
-  }
-  .username-screen h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin-bottom: .5rem; }
-  .username-screen p { font-size: 14px; color: var(--ink2); margin-bottom: 2rem; line-height: 1.5; }
-  .username-input-wrap { display: flex; gap: 8px; max-width: 340px; margin: 0 auto 1rem; }
-  .username-input-wrap input {
-    flex: 1; padding: 11px 14px; border: 1px solid var(--line); border-radius: 8px;
-    font-family: var(--sans); font-size: 15px; background: var(--bg); color: var(--ink);
-    outline: none; transition: border-color .15s; text-align: center;
-  }
-  .username-input-wrap input:focus { border-color: var(--accent); }
-  .username-err { font-size: 12px; color: var(--no); font-family: var(--mono); min-height: 16px; }
-  .start-btn {
-    padding: 11px 28px; background: var(--ink); color: var(--bg);
-    border: none; border-radius: 8px; font-family: var(--sans);
-    font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity .15s;
-  }
-  .start-btn:hover { opacity: .85; }
-
-  /* ── LEADERBOARD ── */
-  .lb-section { margin-top: 2rem; }
-  .lb-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
-  .lb-title { font-family: var(--serif); font-size: 20px; font-weight: 400; }
-  .lb-sub { font-family: var(--mono); font-size: 11px; color: var(--ink3); }
-  .lb-table { width: 100%; border-collapse: collapse; }
-  .lb-table th { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: .5px; text-transform: uppercase; text-align: left; padding: 6px 0; border-bottom: 1px solid var(--line); }
-  .lb-table th:last-child { text-align: right; }
-  .lb-table td { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle; }
-  .lb-table td:last-child { text-align: right; font-family: var(--mono); font-weight: 500; }
-  .lb-table tr:last-child td { border-bottom: none; }
-  .lb-rank { font-family: var(--mono); font-size: 12px; color: var(--ink3); width: 28px; }
-  .lb-name { font-weight: 500; }
-  .lb-date { font-size: 12px; color: var(--ink3); font-family: var(--mono); }
-  .medal-1 { color: #b8860b; } .medal-2 { color: #808080; } .medal-3 { color: #8b5e3c; }
-  .lb-score-good { color: var(--yes); } .lb-score-ok { color: var(--accent); } .lb-score-bad { color: var(--no); }
-  .lb-empty { text-align: center; padding: 2rem; color: var(--ink3); font-size: 13px; font-family: var(--mono); }
-  .view-lb-btn {
-    width: 100%; padding: 11px; background: transparent; color: var(--ink2);
-    border: 1px solid var(--line); border-radius: 8px; font-family: var(--sans);
-    font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 1rem;
-  }
-  .view-lb-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
-
+/* SETTINGS SECTIONS */
+.section-box { border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.25rem; }
+.section-box-label { font-size: 11px; color: var(--ink2); font-family: var(--mono); letter-spacing: .5px; text-transform: uppercase; display: block; margin-bottom: .75rem; }
+.danger-zone { border: 1px solid var(--no); border-radius: 10px; padding: 1.25rem; }
+.danger-zone h3 { font-size: 11px; color: var(--no); font-family: var(--mono); margin-bottom: .75rem; letter-spacing: .5px; text-transform: uppercase; }
+.danger-zone p { font-size: 12px; color: var(--ink2); margin-bottom: 1rem; line-height: 1.5; }
+.danger-btn { padding: 8px 14px; background: var(--no-bg); color: var(--no); border: 1px solid var(--no); border-radius: 6px; font-family: var(--mono); font-size: 12px; cursor: pointer; transition: opacity .15s; }
+.danger-btn:hover { opacity: .8; }
 </style>
 </head>
 <body>
-
 <div class="wrap">
+
   <div class="masthead">
     <div>
       <h1>Poll Position</h1>
       <p id="meta-sub">How well do you know the numbers?</p>
     </div>
-    <button class="admin-link" onclick="openAdmin()">Admin ⚙</button>
+    <button class="admin-btn" onclick="openAdmin()">Admin ⚙</button>
   </div>
 
   <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
 
   <!-- USERNAME SCREEN -->
-  <div id="username-screen" class="username-screen">
+  <div id="username-screen" class="username-screen" style="display:none">
     <h2>Enter your name</h2>
-    <p>Your score will be saved to the leaderboard<br>when you finish all the questions.</p>
-    <div class="username-input-wrap">
+    <p>Your score will be saved to the leaderboard<br>when you finish all questions.</p>
+    <div class="username-row">
       <input type="text" id="username-input" placeholder="Your name" maxlength="20" onkeydown="if(event.key==='Enter')startGame()">
     </div>
     <div class="username-err" id="username-err"></div>
-    <br>
     <button class="start-btn" onclick="startGame()">Start quiz →</button>
-    <div style="margin-top:1.5rem">
-      <button class="view-lb-btn" onclick="showLeaderboard()">View leaderboard</button>
-    </div>
+    <button class="ghost-btn" onclick="showLeaderboard()">View leaderboard</button>
   </div>
 
-  <!-- LEADERBOARD SCREEN -->
+  <!-- LEADERBOARD PAGE -->
   <div id="leaderboard-screen" style="display:none">
     <div class="lb-header">
       <div class="lb-title">Leaderboard</div>
       <div class="lb-sub">lower score = better</div>
     </div>
     <div id="lb-content"></div>
-    <button class="view-lb-btn" onclick="backToStart()" style="margin-top:1.5rem">← Back</button>
+    <button class="ghost-btn" style="margin-top:1.5rem" onclick="backToStart()">← Back</button>
   </div>
 
-  <!-- GAME AREA -->
+  <!-- GAME -->
   <div id="game-area" style="display:none">
     <div class="q-label" id="q-count"></div>
     <div class="question" id="q-text"></div>
     <div class="q-source" id="q-source"></div>
-
     <div class="input-zone">
       <div class="input-header">
         <label>Your guess</label>
         <span class="guess-display" id="guess-val">50%</span>
       </div>
       <input type="range" min="0" max="100" value="50" step="1" id="slider">
-      <div class="tick-row">
-        <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
-      </div>
+      <div class="tick-row"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
     </div>
-
     <button class="submit-btn" id="submit-btn" onclick="revealAnswer()">Lock in my guess</button>
-
     <div class="reveal" id="reveal-box">
       <div class="bars">
         <div class="bar-row bar-guess">
@@ -410,48 +286,47 @@
   <!-- EMPTY STATE -->
   <div class="empty-state" id="empty-state" style="display:none">
     <h2>No questions yet</h2>
-    <p>Head to the admin panel to add polling questions.<br>They'll show up here once you save them.</p>
+    <p>Open the admin panel to add polling questions.</p>
   </div>
 
   <!-- SCOREBOARD -->
   <div class="scoreboard" id="scoreboard">
     <div class="score-title">Your results</div>
+    <div class="score-name" id="score-name"></div>
     <div class="score-num" id="final-score"></div>
     <div class="score-unit">average points off</div>
     <div class="score-grade" id="score-grade"></div>
     <div class="score-rows" id="score-rows"></div>
-    <div style="display:flex;gap:8px;margin-top:1.5rem">
-      <button class="restart-btn" style="flex:1" onclick="restart()">Play again</button>
-      <button class="restart-btn" style="flex:1;background:transparent;color:var(--accent);border:1.5px solid var(--accent)" onclick="showLeaderboard()">Leaderboard</button>
+    <div class="score-actions">
+      <button class="btn-primary" onclick="restart()">Play again</button>
+      <button class="btn-outline" onclick="showLeaderboard()">Leaderboard</button>
     </div>
   </div>
+
 </div>
 
-<!-- ── ADMIN OVERLAY ── -->
+<!-- ADMIN OVERLAY -->
 <div class="overlay" id="overlay" onclick="overlayClick(event)">
-  <div class="modal" id="modal">
+  <div class="modal">
 
-    <!-- AUTH SCREEN -->
     <div id="auth-screen">
       <div class="modal-header">
         <h2>Admin access</h2>
         <button class="modal-close" onclick="closeAdmin()">✕</button>
       </div>
       <div class="auth-box">
-        <p>Enter your admin password to manage questions and settings.</p>
+        <p>Enter the admin password to manage questions and settings.</p>
         <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPw()">
         <div class="auth-error" id="auth-error">Incorrect password</div>
         <button class="auth-btn" onclick="checkPw()">Enter</button>
       </div>
     </div>
 
-    <!-- ADMIN PANEL -->
     <div id="admin-panel" style="display:none">
       <div class="modal-header">
         <h2>Admin panel</h2>
         <button class="modal-close" onclick="closeAdmin()">✕</button>
       </div>
-
       <div class="admin-tabs">
         <button class="admin-tab active" onclick="switchTab('questions')">Questions</button>
         <button class="admin-tab" onclick="switchTab('add')">Add new</button>
@@ -459,14 +334,14 @@
         <button class="admin-tab" onclick="switchTab('settings')">Settings</button>
       </div>
 
-      <!-- TAB: QUESTIONS -->
+      <!-- QUESTIONS TAB -->
       <div class="tab-panel active" id="tab-questions">
         <div class="flash" id="q-flash"></div>
-        <div class="question-list" id="question-list"></div>
-        <div class="no-qs" id="no-qs" style="display:none">No questions added yet.</div>
+        <div class="q-list" id="question-list"></div>
+        <div class="no-qs" id="no-qs" style="display:none">No questions yet.</div>
       </div>
 
-      <!-- TAB: ADD NEW -->
+      <!-- ADD TAB -->
       <div class="tab-panel" id="tab-add">
         <div class="flash" id="add-flash"></div>
         <div class="form-group">
@@ -477,7 +352,7 @@
           <div class="form-group">
             <label class="form-label">Correct answer (%)</label>
             <input class="form-input" id="add-ans" type="number" min="0" max="100" step="0.1" placeholder="46">
-            <div class="form-hint">0–100</div>
+            <div class="form-hint">0 to 100</div>
           </div>
           <div class="form-group">
             <label class="form-label">Source</label>
@@ -485,59 +360,52 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Context (shown after reveal)</label>
-          <textarea class="form-textarea" id="add-ctx" rows="3" placeholder="Additional context about this number..."></textarea>
+          <label class="form-label">Context / URL (shown after reveal)</label>
+          <textarea class="form-textarea" id="add-ctx" rows="2" placeholder="Extra context, or paste a URL to link to the source..."></textarea>
         </div>
         <button class="save-btn" onclick="addQuestion()">Add question</button>
       </div>
 
-      <!-- TAB: LEADERBOARD -->
+      <!-- LEADERBOARD TAB -->
       <div class="tab-panel" id="tab-leaderboard">
         <div class="flash" id="lb-flash"></div>
         <div id="admin-lb-content"></div>
-        <div style="margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1.25rem">
+        <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--line)">
           <button class="danger-btn" onclick="clearLeaderboard()">Clear all scores</button>
         </div>
       </div>
+
+      <!-- SETTINGS TAB -->
       <div class="tab-panel" id="tab-settings">
         <div class="flash" id="settings-flash"></div>
 
-        <div class="pw-section">
-          <div class="form-group">
-            <label class="form-label">Change admin password</label>
-            <div class="inline-row">
-              <input class="form-input" id="new-pw" type="password" placeholder="New password">
-              <button class="inline-btn" onclick="changePassword()">Update</button>
-            </div>
-            <div class="form-hint">Default password: whiskey</div>
+        <div class="section-box">
+          <span class="section-box-label">Password</span>
+          <div class="inline-row">
+            <input class="form-input" id="new-pw" type="password" placeholder="New password">
+            <button class="inline-btn" onclick="changePassword()">Update</button>
           </div>
+          <div class="form-hint" style="margin-top:6px">Default: whiskey</div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Site subtitle</label>
+        <div class="section-box">
+          <span class="section-box-label">Site subtitle</span>
           <div class="inline-row">
             <input class="form-input" id="subtitle-input" type="text" placeholder="How well do you know the numbers?">
             <button class="inline-btn" onclick="saveSubtitle()">Save</button>
           </div>
         </div>
 
-        <div class="form-group" style="border:1px solid var(--line);border-radius:10px;padding:1.25rem;margin-bottom:1rem">
-          <label class="form-label" style="margin-bottom:.75rem;display:block">Export / Import questions</label>
-          <p style="font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:1rem">
-            Export saves your current questions as a <code style="font-family:var(--mono);font-size:11px">.json</code> file.
-            To push questions to your live site, paste that JSON into the <code style="font-family:var(--mono);font-size:11px">DEFAULT_QUESTIONS</code> array in <code style="font-family:var(--mono);font-size:11px">index.html</code> and re-upload to GitHub.
-            Import loads a previously exported file into this browser.
-          </p>
+        <div class="section-box">
+          <span class="section-box-label">Export / Import questions</span>
+          <p style="font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:1rem">Export your questions as a <code style="font-family:var(--mono);font-size:11px">.json</code> file, paste the contents into <code style="font-family:var(--mono);font-size:11px">DEFAULT_QUESTIONS</code> in <code style="font-family:var(--mono);font-size:11px">index.html</code>, and re-upload to GitHub to push updates to all visitors.</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button class="inline-btn" onclick="exportQuestions()">↓ Export JSON</button>
-            <label class="inline-btn" style="cursor:pointer">
-              ↑ Import JSON
-              <input type="file" id="import-input" accept=".json" style="display:none" onchange="importQuestions(event)">
-            </label>
+            <label class="file-label">↑ Import JSON<input type="file" id="import-file" accept=".json" style="display:none" onchange="importQuestions(event)"></label>
           </div>
-          <div id="import-preview" style="display:none;margin-top:1rem;padding:1rem;background:var(--accent-bg);border-radius:8px;border:1px solid var(--accent)">
-            <div style="font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:.75rem" id="import-summary"></div>
-            <div style="display:flex;gap:8px">
+          <div class="import-preview" id="import-preview">
+            <div class="import-preview-text" id="import-summary"></div>
+            <div class="import-actions">
               <button class="save-btn" style="flex:1" onclick="confirmImport()">Replace all &amp; import</button>
               <button class="inline-btn" onclick="cancelImport()">Cancel</button>
             </div>
@@ -545,499 +413,407 @@
         </div>
 
         <div class="danger-zone">
-          <h3>DANGER ZONE</h3>
-          <p>This will permanently delete all questions from localStorage. You cannot undo this.</p>
+          <h3>Danger zone</h3>
+          <p>Permanently deletes all questions from this browser's localStorage. Cannot be undone.</p>
           <button class="danger-btn" onclick="clearAll()">Clear all questions</button>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </div>
 
 <script>
-/* ━━━━━━━━━━ DEFAULTS ━━━━━━━━━━ */
-const DEFAULT_QUESTIONS = [
+/* ═══════════════════════════════════════════════════
+   DEFAULT QUESTIONS
+   To push new questions to all visitors:
+   1. Export JSON from Admin > Settings
+   2. Replace everything between [ and ] below with the exported JSON
+   3. Re-upload index.html to GitHub
+═══════════════════════════════════════════════════ */
+var DEFAULT_QUESTIONS = [
   {
-    id: 1,
-    q: "What percentage of Americans approve of Donald Trump's job performance?",
-    answer: 46,
-    source: "Gallup, March 2025",
-    context: "Trump's approval has fluctuated between 41–47% in his second term, tracking closely with partisan polarization trends. This is higher than most of his first-term averages."
+    "id": 1,
+    "q": "What percentage of Americans approve of same-sex marriage?",
+    "answer": 68,
+    "source": "Gallup",
+    "context": "https://news.gallup.com/poll/691139/record-party-divide-years-sex-marriage-ruling.aspx"
   },
   {
-    id: 2,
-    q: "What share of Americans say the country is heading in the right direction?",
-    answer: 24,
-    source: "AP-NORC, February 2025",
-    context: "Right track/wrong track numbers have remained persistently negative for several years. Even during Biden's presidency, this figure rarely exceeded 35%."
+    "id": 2,
+    "q": "What percentage of Americans say abortion should be illegal in all circumstances?",
+    "answer": 11,
+    "source": "Pew",
+    "context": "https://www.pewresearch.org/politics/2026/03/12/majority-of-americans-continue-to-say-abortion-should-be-legal-in-all-or-most-cases/"
   },
   {
-    id: 3,
-    q: "What percentage of Americans say they trust the federal government to do what is right most of the time?",
-    answer: 22,
-    source: "Pew Research Center, 2024",
-    context: "Public trust in government has declined dramatically since the 1960s, when it stood above 70%. This figure is near historic lows."
-  },
-  {
-    id: 4,
-    q: "What percentage of Americans say immigration is the most important problem facing the country?",
-    answer: 28,
-    source: "Gallup, January 2025",
-    context: "Immigration reached its highest-ever recorded level as a top concern in early 2024. It dropped after Trump took office and enacted stricter border policies."
-  },
-  {
-    id: 5,
-    q: "What share of Americans say they support stricter gun control laws?",
-    answer: 57,
-    source: "Gallup, October 2024",
-    context: "Support peaked at 67% in 2019. It has trended downward since, with a massive partisan gap — 87% of Democrats vs. 24% of Republicans."
+    "id": 3,
+    "q": "What percentage of Americans support a national law that would permit gender reassignment surgery for minors with doctoral and parental consent?",
+    "answer": 27,
+    "source": "The Argument Mag",
+    "context": "https://www.theargumentmag.com/p/the-trans-rights-backlash-is-real"
   }
 ];
 
-/* ━━━━━━━━━━ STORAGE ━━━━━━━━━━ */
+/* ─── STORAGE ─── */
 function getQuestions() {
-  const raw = localStorage.getItem('pp_questions');
-  if (!raw) {
-    localStorage.setItem('pp_questions', JSON.stringify(DEFAULT_QUESTIONS));
-    return DEFAULT_QUESTIONS;
-  }
-  return JSON.parse(raw);
+  try {
+    var raw = localStorage.getItem('pp_q');
+    if (!raw) { localStorage.setItem('pp_q', JSON.stringify(DEFAULT_QUESTIONS)); return DEFAULT_QUESTIONS; }
+    return JSON.parse(raw);
+  } catch(e) { return DEFAULT_QUESTIONS; }
 }
-function saveQuestions(qs) { localStorage.setItem('pp_questions', JSON.stringify(qs)); }
-function getPw() { return localStorage.getItem('pp_pw') || 'whiskey'; }
-function getSubtitle() { return localStorage.getItem('pp_subtitle') || 'How well do you know the numbers?'; }
+function saveQuestions(qs) { localStorage.setItem('pp_q', JSON.stringify(qs)); }
+function getPw()       { return localStorage.getItem('pp_pw')  || 'whiskey'; }
+function getSubtitle() { return localStorage.getItem('pp_sub') || 'How well do you know the numbers?'; }
+function getLeaderboard() { try { return JSON.parse(localStorage.getItem('pp_lb') || '[]'); } catch(e) { return []; } }
+function saveLeaderboard(lb) { localStorage.setItem('pp_lb', JSON.stringify(lb)); }
 
-/* ━━━━━━━━━━ LEADERBOARD STORAGE ━━━━━━━━━━ */
-function getLeaderboard() {
-  try { return JSON.parse(localStorage.getItem('pp_leaderboard') || '[]'); } catch(e) { return []; }
+/* ─── UTIL ─── */
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function hideAll() {
+  ['username-screen','leaderboard-screen','game-area','empty-state'].forEach(function(id){ document.getElementById(id).style.display='none'; });
+  document.getElementById('scoreboard').classList.remove('show');
 }
-function saveLeaderboard(lb) { localStorage.setItem('pp_leaderboard', JSON.stringify(lb)); }
-
-function addToLeaderboard(name, avg, total, numQuestions) {
-  const lb = getLeaderboard();
-  lb.push({
-    name: name,
-    avg: avg,
-    total: total,
-    questions: numQuestions,
-    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  });
-  lb.sort(function(a, b) { return a.avg - b.avg; });
-  saveLeaderboard(lb);
+function flash(id, msg, type) {
+  var el = document.getElementById(id);
+  el.className = 'flash ' + (type||'success');
+  el.textContent = msg;
+  setTimeout(function(){ el.className='flash'; el.textContent=''; }, 3500);
 }
+function clearFlashes() { document.querySelectorAll('.flash').forEach(function(f){ f.className='flash'; f.textContent=''; }); }
 
-function renderLeaderboardHTML(lb, showDelete) {
-  if (lb.length === 0) return '<div class="lb-empty">No scores yet. Be the first!</div>';
-  const medals = ['medal-1','medal-2','medal-3'];
+/* ─── LEADERBOARD ─── */
+function lbHTML(lb, admin) {
+  if (!lb.length) return '<div class="lb-empty">No scores yet. Be the first!</div>';
+  var medals = ['m1','m2','m3'];
+  var ranks  = ['1st','2nd','3rd'];
   return '<table class="lb-table"><thead><tr><th>#</th><th>Name</th><th>Date</th><th>Avg off</th></tr></thead><tbody>' +
-    lb.map(function(e, i) {
-      const rankCls = i < 3 ? medals[i] : '';
-      const rankLabel = i === 0 ? '1st' : i === 1 ? '2nd' : i === 2 ? '3rd' : (i+1)+'th';
-      const scoreCls = e.avg <= 3 ? 'lb-score-good' : e.avg <= 10 ? 'lb-score-ok' : 'lb-score-bad';
-      const del = showDelete ? '<button onclick="deleteEntry('+i+')" style="margin-left:8px;font-size:10px;font-family:var(--mono);padding:2px 6px;border:1px solid var(--line);border-radius:4px;cursor:pointer;background:transparent;color:var(--ink3)">×</button>' : '';
-      return '<tr><td class="lb-rank ' + rankCls + '">' + rankLabel + '</td><td class="lb-name">' + e.name + del + '</td><td class="lb-date">' + e.date + '</td><td class="' + scoreCls + '">' + e.avg.toFixed(1) + 'pt</td></tr>';
-    }).join('') +
-  '</tbody></table>';
+    lb.map(function(e,i){
+      var sc = e.avg<=3?'sc-good':e.avg<=10?'sc-ok':'sc-bad';
+      var del = admin ? '<button class="del-entry" onclick="deleteLbEntry('+i+')">×</button>' : '';
+      return '<tr><td class="lb-rank '+(i<3?medals[i]:'')+'">'+(i<3?ranks[i]:(i+1)+'th')+'</td>' +
+        '<td class="lb-name">'+esc(e.name)+del+'</td>' +
+        '<td class="lb-date">'+esc(e.date)+'</td>' +
+        '<td class="'+sc+'">'+e.avg.toFixed(1)+'pt</td></tr>';
+    }).join('') + '</tbody></table>';
 }
 
-function renderAdminLeaderboard() {
-  const lb = getLeaderboard();
-  document.getElementById('admin-lb-content').innerHTML = renderLeaderboardHTML(lb, true);
+function showLeaderboard() {
+  hideAll();
+  document.getElementById('leaderboard-screen').style.display = 'block';
+  document.getElementById('lb-content').innerHTML = lbHTML(getLeaderboard(), false);
 }
 
-function deleteEntry(idx) {
-  const lb = getLeaderboard();
-  lb.splice(idx, 1);
-  saveLeaderboard(lb);
-  renderAdminLeaderboard();
-  flash('lb-flash', 'Entry removed.');
+function backToStart() {
+  hideAll();
+  document.getElementById('username-screen').style.display = 'block';
+}
+
+function deleteLbEntry(i) {
+  var lb = getLeaderboard(); lb.splice(i,1); saveLeaderboard(lb); renderAdminLb();
 }
 
 function clearLeaderboard() {
-  if (!confirm('Clear all leaderboard scores? Cannot be undone.')) return;
-  localStorage.removeItem('pp_leaderboard');
-  renderAdminLeaderboard();
-  flash('lb-flash', 'Leaderboard cleared.');
+  if (!confirm('Clear all scores? Cannot be undone.')) return;
+  localStorage.removeItem('pp_lb'); renderAdminLb(); flash('lb-flash','Leaderboard cleared.');
 }
 
-/* ━━━━━━━━━━ GAME STATE ━━━━━━━━━━ */
-let current = 0, guesses = [], questions = [], currentUser = '';
+function renderAdminLb() {
+  document.getElementById('admin-lb-content').innerHTML = lbHTML(getLeaderboard(), true);
+}
+
+/* ─── GAME STATE ─── */
+var current=0, guesses=[], questions=[], currentUser='';
 
 function initGame() {
   questions = getQuestions();
   document.getElementById('meta-sub').textContent = getSubtitle();
-  current = 0; guesses = [];
-  document.getElementById('scoreboard').classList.remove('show');
-  document.getElementById('game-area').style.display = 'none';
-  document.getElementById('leaderboard-screen').style.display = 'none';
-
-  if (questions.length === 0) {
-    document.getElementById('username-screen').style.display = 'none';
-    document.getElementById('empty-state').style.display = 'block';
-    return;
-  }
-  document.getElementById('empty-state').style.display = 'none';
+  current=0; guesses=[];
+  document.getElementById('prog').style.width = '0%';
+  hideAll();
+  if (!questions.length) { document.getElementById('empty-state').style.display='block'; return; }
   document.getElementById('username-screen').style.display = 'block';
-
-  const slider = document.getElementById('slider');
-  slider.oninput = function() { document.getElementById('guess-val').textContent = slider.value + '%'; };
+  document.getElementById('slider').oninput = function(){ document.getElementById('guess-val').textContent = this.value+'%'; };
 }
 
 function startGame() {
-  const nameInput = document.getElementById('username-input');
-  const name = nameInput.value.trim();
-  if (!name) {
-    document.getElementById('username-err').textContent = 'Please enter a name to continue.';
-    nameInput.focus();
-    return;
-  }
+  var name = document.getElementById('username-input').value.trim();
+  if (!name) { document.getElementById('username-err').textContent='Please enter a name to continue.'; document.getElementById('username-input').focus(); return; }
   currentUser = name;
   document.getElementById('username-err').textContent = '';
-  document.getElementById('username-screen').style.display = 'none';
+  hideAll();
   document.getElementById('game-area').style.display = 'block';
   loadQ(0);
 }
 
-function showLeaderboard() {
-  document.getElementById('username-screen').style.display = 'none';
-  document.getElementById('game-area').style.display = 'none';
-  document.getElementById('scoreboard').classList.remove('show');
-  document.getElementById('leaderboard-screen').style.display = 'block';
-  const lb = getLeaderboard();
-  document.getElementById('lb-content').innerHTML = renderLeaderboardHTML(lb, false);
-}
-
-function backToStart() {
-  document.getElementById('leaderboard-screen').style.display = 'none';
-  document.getElementById('username-screen').style.display = 'block';
-}
-
 function loadQ(i) {
-  const q = questions[i];
-  document.getElementById('q-count').textContent = `Question ${i + 1} of ${questions.length}`;
+  var q = questions[i];
+  document.getElementById('q-count').textContent = 'Question '+(i+1)+' of '+questions.length;
   document.getElementById('q-text').textContent = q.q;
-  document.getElementById('q-source').textContent = q.source;
-  document.getElementById('prog').style.width = (i / questions.length * 100) + '%';
+  document.getElementById('q-source').textContent = q.source||'';
+  document.getElementById('prog').style.width = (i/questions.length*100)+'%';
   document.getElementById('slider').value = 50;
   document.getElementById('guess-val').textContent = '50%';
   document.getElementById('reveal-box').classList.remove('show');
+  document.getElementById('guess-bar').style.width = '0%';
+  document.getElementById('answer-bar').style.width = '0%';
   document.getElementById('submit-btn').disabled = false;
-  document.getElementById('next-btn').textContent = i === questions.length - 1 ? 'See my results →' : 'Next question →';
+  document.getElementById('next-btn').textContent = i===questions.length-1 ? 'See my results →' : 'Next question →';
 }
 
 function revealAnswer() {
-  const q = questions[current];
-  const guess = parseInt(document.getElementById('slider').value);
+  var q = questions[current];
+  var guess = parseInt(document.getElementById('slider').value);
   guesses.push(guess);
   document.getElementById('submit-btn').disabled = true;
-  document.getElementById('guess-bar-val').textContent = guess + '%';
-  document.getElementById('answer-bar-val').textContent = q.answer + '%';
-  document.getElementById('q-context').textContent = q.context || '';
-  document.getElementById('reveal-box').classList.add('show');
+  document.getElementById('guess-bar-val').textContent = guess+'%';
+  document.getElementById('answer-bar-val').textContent = q.answer+'%';
 
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      document.getElementById('guess-bar').style.width = guess + '%';
-      setTimeout(() => { document.getElementById('answer-bar').style.width = q.answer + '%'; }, 200);
+  var ctx = (q.context||'').trim();
+  var ctxEl = document.getElementById('q-context');
+  if (/^https?:\/\//i.test(ctx)) {
+    ctxEl.innerHTML = 'Source: <a href="'+esc(ctx)+'" target="_blank" rel="noopener">'+esc(ctx)+'</a>';
+  } else {
+    ctxEl.textContent = ctx;
+  }
+
+  document.getElementById('reveal-box').classList.add('show');
+  requestAnimationFrame(function(){
+    setTimeout(function(){
+      document.getElementById('guess-bar').style.width = guess+'%';
+      setTimeout(function(){ document.getElementById('answer-bar').style.width = q.answer+'%'; }, 200);
     }, 50);
   });
 
-  const diff = Math.abs(guess - q.answer);
-  const signed = guess - q.answer;
-  document.getElementById('verdict-num').textContent = diff === 0 ? 'Exact!' : (signed > 0 ? '+' : '') + signed + 'pt';
-  document.getElementById('verdict').className = 'verdict ' + (diff === 0 ? 'exact' : diff <= 5 ? 'close' : 'far');
+  var diff   = Math.abs(guess - q.answer);
+  var signed = guess - q.answer;
+  document.getElementById('verdict-num').textContent = diff===0 ? 'Exact!' : (signed>0?'+':'')+signed+'pt';
+  document.getElementById('verdict').className = 'verdict '+(diff===0?'exact':diff<=5?'close':'far');
   document.getElementById('verdict-text').textContent =
-    diff === 0 ? 'Perfect! You nailed it.' :
-    diff <= 3  ? 'Extremely close — you really know your polling.' :
-    diff <= 7  ? `You were ${diff} points off. Solid instinct.` :
-    diff <= 15 ? `${diff} points off. The actual number might surprise you.` :
-                 `${diff} points off. This one's tricky.`;
+    diff===0  ? 'Perfect! You nailed it.' :
+    diff<=3   ? 'Extremely close — you really know your polling.' :
+    diff<=7   ? 'You were '+diff+' points off. Solid instinct.' :
+    diff<=15  ? diff+' points off. The actual number might surprise you.' :
+                diff+' points off. This one\'s tricky.';
 }
 
 function nextQ() {
-  if (current === questions.length - 1) { showScore(); return; }
-  current++;
-  loadQ(current);
+  if (current===questions.length-1) { showScore(); return; }
+  current++; loadQ(current);
 }
 
 function showScore() {
-  document.getElementById('game-area').style.display = 'none';
+  var total = guesses.reduce(function(s,g,i){ return s+Math.abs(g-questions[i].answer); }, 0);
+  var avg   = parseFloat((total/guesses.length).toFixed(1));
+  var lb    = getLeaderboard();
+  lb.push({ name:currentUser, avg:avg, date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) });
+  lb.sort(function(a,b){ return a.avg-b.avg; });
+  saveLeaderboard(lb);
+
   document.getElementById('prog').style.width = '100%';
-  const sc = document.getElementById('scoreboard');
-  sc.classList.add('show');
-
-  const total = guesses.reduce(function(s, g, i) { return s + Math.abs(g - questions[i].answer); }, 0);
-  const avg = parseFloat((total / guesses.length).toFixed(1));
+  hideAll();
+  document.getElementById('scoreboard').classList.add('show');
+  document.getElementById('score-name').textContent = currentUser;
   document.getElementById('final-score').textContent = avg.toFixed(1);
+  document.getElementById('score-grade').textContent =
+    avg<=3  ? 'Polling expert 🎯' :
+    avg<=7  ? 'Sharp instincts 📊' :
+    avg<=15 ? 'Room to improve 📰' : 'Back to the newsroom 📺';
 
-  const grade = avg <= 3 ? 'Polling expert 🎯' : avg <= 7 ? 'Sharp instincts 📊' : avg <= 15 ? 'Room to improve 📰' : 'Back to the newsroom 📺';
-  document.getElementById('score-grade').textContent = grade;
-
-  addToLeaderboard(currentUser, avg, total, guesses.length);
-
-  document.getElementById('score-rows').innerHTML = guesses.map(function(g, i) {
-    const diff = Math.abs(g - questions[i].answer);
-    const cls = diff <= 3 ? 'good' : diff <= 10 ? 'ok' : 'bad';
-    const short = questions[i].q.length > 55 ? questions[i].q.substring(0, 55) + '…' : questions[i].q;
-    return '<div class="score-row"><span class="sr-q">' + short + '</span><span class="sr-guess">' + g + '%</span><span class="sr-ans">→ ' + questions[i].answer + '%</span><span class="diff ' + cls + '">' + (diff === 0 ? '✓ 0' : diff + 'pt') + '</span></div>';
+  document.getElementById('score-rows').innerHTML = guesses.map(function(g,i){
+    var diff = Math.abs(g-questions[i].answer);
+    var cls  = diff<=3?'sc-good':diff<=10?'sc-ok':'sc-bad';
+    var short = questions[i].q.length>55 ? questions[i].q.substring(0,55)+'…' : questions[i].q;
+    return '<div class="score-row"><span class="sr-q">'+short+'</span><span class="sr-guess">'+g+'%</span><span class="sr-ans">→ '+questions[i].answer+'%</span><span class="sr-diff '+cls+'">'+(diff===0?'✓ 0':diff+'pt')+'</span></div>';
   }).join('');
 }
 
 function restart() {
-  current = 0; guesses = [];
-  document.getElementById('scoreboard').classList.remove('show');
-  document.getElementById('leaderboard-screen').style.display = 'none';
-  document.getElementById('username-screen').style.display = 'block';
-  document.getElementById('username-input').value = '';
-  document.getElementById('prog').style.width = '0%';
+  current=0; guesses=[];
+  document.getElementById('username-input').value='';
+  initGame();
 }
 
-/* ━━━━━━━━━━ ADMIN OVERLAY ━━━━━━━━━━ */
-let authed = false;
+/* ─── ADMIN ─── */
+var authed = false;
 
 function openAdmin() {
   document.getElementById('overlay').classList.add('show');
-  if (authed) {
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    renderQuestionList();
-  } else {
+  if (authed) { showPanel(); } else {
     document.getElementById('auth-screen').style.display = 'block';
     document.getElementById('admin-panel').style.display = 'none';
-    setTimeout(() => document.getElementById('pw-input').focus(), 100);
+    setTimeout(function(){ document.getElementById('pw-input').focus(); }, 100);
   }
 }
 
 function closeAdmin() {
   document.getElementById('overlay').classList.remove('show');
-  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-input').value='';
   document.getElementById('auth-error').classList.remove('show');
 }
 
-function overlayClick(e) {
-  if (e.target === document.getElementById('overlay')) closeAdmin();
-}
+function overlayClick(e) { if (e.target===document.getElementById('overlay')) closeAdmin(); }
 
 function checkPw() {
-  const val = document.getElementById('pw-input').value;
-  if (val === getPw()) {
-    authed = true;
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    document.getElementById('pw-input').value = '';
-    document.getElementById('subtitle-input').value = getSubtitle();
-    renderQuestionList();
-    switchTab('questions');
+  if (document.getElementById('pw-input').value === getPw()) {
+    authed=true; document.getElementById('pw-input').value='';
+    document.getElementById('auth-error').classList.remove('show');
+    showPanel();
   } else {
     document.getElementById('auth-error').classList.add('show');
-    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').value='';
   }
 }
 
-/* ━━━━━━━━━━ ADMIN TABS ━━━━━━━━━━ */
+function showPanel() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'block';
+  document.getElementById('subtitle-input').value = getSubtitle();
+  switchTab('questions');
+}
+
 function switchTab(name) {
-  const names = ['questions','add','leaderboard','settings'];
-  document.querySelectorAll('.admin-tab').forEach((t, i) => {
-    t.classList.toggle('active', names[i] === name);
-  });
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  if (name === 'leaderboard') renderAdminLeaderboard();
-  hideFlash();
+  var names = ['questions','add','leaderboard','settings'];
+  document.querySelectorAll('.admin-tab').forEach(function(t,i){ t.classList.toggle('active', names[i]===name); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name==='questions')   renderQuestionList();
+  if (name==='leaderboard') renderAdminLb();
+  clearFlashes();
 }
 
-function hideFlash() {
-  document.querySelectorAll('.flash').forEach(f => { f.className = 'flash'; f.textContent = ''; });
-}
-
-function flash(id, msg, type='success') {
-  const el = document.getElementById(id);
-  el.className = 'flash ' + type;
-  el.textContent = msg;
-  setTimeout(() => { el.className = 'flash'; el.textContent = ''; }, 3000);
-}
-
-/* ━━━━━━━━━━ QUESTION LIST ━━━━━━━━━━ */
+/* QUESTION LIST */
 function renderQuestionList() {
-  const qs = getQuestions();
-  const list = document.getElementById('question-list');
-  const none = document.getElementById('no-qs');
-
-  if (qs.length === 0) {
-    list.innerHTML = ''; none.style.display = 'block'; return;
-  }
-  none.style.display = 'none';
-
-  list.innerHTML = qs.map((q, i) => `
-    <div class="q-item" id="qi-${q.id}">
-      <div class="q-item-body">
-        <div class="q-item-text">${q.q}</div>
-        <div class="q-item-meta">Answer: ${q.answer}% &nbsp;·&nbsp; ${q.source}</div>
-        <div class="edit-form" id="ef-${q.id}">
-          <div class="form-group" style="margin-top:10px">
-            <label class="form-label">Question</label>
-            <textarea class="form-textarea" id="eq-${q.id}" rows="2">${q.q}</textarea>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Answer (%)</label>
-              <input class="form-input" id="ea-${q.id}" type="number" value="${q.answer}" min="0" max="100" step="0.1">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Source</label>
-              <input class="form-input" id="es-${q.id}" type="text" value="${escQ(q.source)}">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Context</label>
-            <textarea class="form-textarea" id="ec-${q.id}" rows="2">${escQ(q.context||'')}</textarea>
-          </div>
-          <button class="save-btn" style="margin-top:4px" onclick="saveEdit(${q.id})">Save changes</button>
-        </div>
-      </div>
-      <div class="q-item-actions">
-        <button class="q-btn" onclick="toggleEdit(${q.id})">Edit</button>
-        <button class="q-btn del" onclick="deleteQ(${q.id})">Del</button>
-      </div>
-    </div>
-  `).join('');
+  var qs   = getQuestions();
+  var list = document.getElementById('question-list');
+  var none = document.getElementById('no-qs');
+  if (!qs.length) { list.innerHTML=''; none.style.display='block'; return; }
+  none.style.display='none';
+  list.innerHTML = qs.map(function(q){
+    return '<div class="q-item" id="qi-'+q.id+'">' +
+      '<div class="q-item-body">' +
+        '<div class="q-item-text">'+esc(q.q)+'</div>' +
+        '<div class="q-item-meta">'+q.answer+'% &nbsp;·&nbsp; '+esc(q.source||'')+'</div>' +
+        '<div class="edit-form" id="ef-'+q.id+'">' +
+          '<div class="form-group" style="margin-top:10px"><label class="form-label">Question</label>' +
+          '<textarea class="form-textarea" id="eq-'+q.id+'" rows="2">'+esc(q.q)+'</textarea></div>' +
+          '<div class="form-row">' +
+            '<div class="form-group"><label class="form-label">Answer (%)</label>' +
+            '<input class="form-input" id="ea-'+q.id+'" type="number" value="'+q.answer+'" min="0" max="100" step="0.1"></div>' +
+            '<div class="form-group"><label class="form-label">Source</label>' +
+            '<input class="form-input" id="es-'+q.id+'" type="text" value="'+esc(q.source||'')+'"></div>' +
+          '</div>' +
+          '<div class="form-group"><label class="form-label">Context / URL</label>' +
+          '<textarea class="form-textarea" id="ec-'+q.id+'" rows="2">'+esc(q.context||'')+'</textarea></div>' +
+          '<button class="save-btn" style="margin-top:2px" onclick="saveEdit('+q.id+')">Save changes</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="q-item-actions">' +
+        '<button class="q-btn" onclick="toggleEdit('+q.id+')">Edit</button>' +
+        '<button class="q-btn del" onclick="deleteQ('+q.id+')">Del</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
 }
 
-function escQ(s) { return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-function toggleEdit(id) {
-  const ef = document.getElementById('ef-' + id);
-  ef.classList.toggle('open');
-}
+function toggleEdit(id) { document.getElementById('ef-'+id).classList.toggle('open'); }
 
 function saveEdit(id) {
-  const qs = getQuestions();
-  const idx = qs.findIndex(q => q.id === id);
-  if (idx === -1) return;
-  qs[idx].q = document.getElementById('eq-' + id).value.trim();
-  qs[idx].answer = parseFloat(document.getElementById('ea-' + id).value);
-  qs[idx].source = document.getElementById('es-' + id).value.trim();
-  qs[idx].context = document.getElementById('ec-' + id).value.trim();
-  saveQuestions(qs);
-  renderQuestionList();
-  flash('q-flash', 'Question updated.');
-  initGame();
+  var qs = getQuestions(), idx = qs.findIndex(function(q){ return q.id===id; });
+  if (idx===-1) return;
+  qs[idx].q       = document.getElementById('eq-'+id).value.trim();
+  qs[idx].answer  = parseFloat(document.getElementById('ea-'+id).value);
+  qs[idx].source  = document.getElementById('es-'+id).value.trim();
+  qs[idx].context = document.getElementById('ec-'+id).value.trim();
+  saveQuestions(qs); renderQuestionList(); flash('q-flash','Question updated.'); initGame();
 }
 
 function deleteQ(id) {
   if (!confirm('Delete this question?')) return;
-  const qs = getQuestions().filter(q => q.id !== id);
-  saveQuestions(qs);
-  renderQuestionList();
-  flash('q-flash', 'Question deleted.');
-  initGame();
+  saveQuestions(getQuestions().filter(function(q){ return q.id!==id; }));
+  renderQuestionList(); flash('q-flash','Question deleted.'); initGame();
 }
 
-/* ━━━━━━━━━━ ADD QUESTION ━━━━━━━━━━ */
 function addQuestion() {
-  const q = document.getElementById('add-q').value.trim();
-  const ans = document.getElementById('add-ans').value;
-  const src = document.getElementById('add-src').value.trim();
-  const ctx = document.getElementById('add-ctx').value.trim();
-
-  if (!q) { flash('add-flash', 'Question text is required.', 'error'); return; }
-  if (ans === '' || isNaN(parseFloat(ans))) { flash('add-flash', 'A valid answer is required.', 'error'); return; }
-
-  const qs = getQuestions();
-  const newId = qs.length > 0 ? Math.max(...qs.map(x => x.id)) + 1 : 1;
-  qs.push({ id: newId, q, answer: parseFloat(ans), source: src, context: ctx });
+  var q   = document.getElementById('add-q').value.trim();
+  var ans = document.getElementById('add-ans').value;
+  var src = document.getElementById('add-src').value.trim();
+  var ctx = document.getElementById('add-ctx').value.trim();
+  if (!q) { flash('add-flash','Question text is required.','error'); return; }
+  if (ans===''||isNaN(parseFloat(ans))) { flash('add-flash','A valid answer (0–100) is required.','error'); return; }
+  var qs = getQuestions();
+  var newId = qs.length ? Math.max.apply(null,qs.map(function(x){return x.id;}))+1 : 1;
+  qs.push({ id:newId, q:q, answer:parseFloat(ans), source:src, context:ctx });
   saveQuestions(qs);
-
-  document.getElementById('add-q').value = '';
-  document.getElementById('add-ans').value = '';
-  document.getElementById('add-src').value = '';
-  document.getElementById('add-ctx').value = '';
-
-  flash('add-flash', 'Question added!');
-  initGame();
+  ['add-q','add-ans','add-src','add-ctx'].forEach(function(id){ document.getElementById(id).value=''; });
+  flash('add-flash','Question added!'); initGame();
 }
 
-/* ━━━━━━━━━━ SETTINGS ━━━━━━━━━━ */
+/* SETTINGS */
 function changePassword() {
-  const val = document.getElementById('new-pw').value;
-  if (!val || val.length < 4) { flash('settings-flash', 'Password must be at least 4 characters.', 'error'); return; }
-  localStorage.setItem('pp_pw', val);
-  document.getElementById('new-pw').value = '';
-  flash('settings-flash', 'Password updated.');
+  var val = document.getElementById('new-pw').value;
+  if (!val||val.length<4) { flash('settings-flash','Password must be at least 4 characters.','error'); return; }
+  localStorage.setItem('pp_pw', val); document.getElementById('new-pw').value='';
+  flash('settings-flash','Password updated.');
 }
 
 function saveSubtitle() {
-  const val = document.getElementById('subtitle-input').value.trim();
-  localStorage.setItem('pp_subtitle', val || 'How well do you know the numbers?');
+  var val = document.getElementById('subtitle-input').value.trim();
+  localStorage.setItem('pp_sub', val||'How well do you know the numbers?');
   document.getElementById('meta-sub').textContent = getSubtitle();
-  flash('settings-flash', 'Subtitle saved.');
+  flash('settings-flash','Subtitle saved.');
 }
 
 function clearAll() {
-  if (!confirm('Delete ALL questions? This cannot be undone.')) return;
-  localStorage.removeItem('pp_questions');
-  renderQuestionList();
-  flash('settings-flash', 'All questions cleared.');
-  initGame();
+  if (!confirm('Delete ALL questions? Cannot be undone.')) return;
+  localStorage.removeItem('pp_q'); renderQuestionList(); flash('settings-flash','All questions cleared.'); initGame();
 }
 
-/* ━━━━━━━━━━ EXPORT / IMPORT ━━━━━━━━━━ */
+/* EXPORT / IMPORT */
 function exportQuestions() {
-  const qs = getQuestions();
-  const json = JSON.stringify(qs, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'poll-position-questions.json';
-  a.click();
+  var qs = getQuestions();
+  var blob = new Blob([JSON.stringify(qs, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a'); a.href=url; a.download='poll-position-questions.json'; a.click();
   URL.revokeObjectURL(url);
-  flash('settings-flash', 'Exported ' + qs.length + ' question' + (qs.length !== 1 ? 's' : '') + '.');
+  flash('settings-flash','Exported '+qs.length+' question'+(qs.length!==1?'s':'')+'.');
 }
 
-let pendingImport = null;
+var pendingImport = null;
 
 function importQuestions(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
   reader.onload = function(ev) {
     try {
-      const data = JSON.parse(ev.target.result);
-      if (!Array.isArray(data)) throw new Error('Not an array');
-      const valid = data.filter(q => q.q && q.answer !== undefined);
-      if (valid.length === 0) throw new Error('No valid questions found');
+      var data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) throw new Error();
+      var valid = data.filter(function(q){ return q.q && q.answer!==undefined; });
+      if (!valid.length) throw new Error();
       pendingImport = valid;
-      document.getElementById('import-summary').textContent =
-        'Ready to import ' + valid.length + ' question' + (valid.length !== 1 ? 's' : '') + ' — this will replace your current set.';
+      document.getElementById('import-summary').textContent = 'Ready to import '+valid.length+' question'+(valid.length!==1?'s':'')+' — replaces your current set.';
       document.getElementById('import-preview').style.display = 'block';
-    } catch(err) {
-      flash('settings-flash', 'Invalid file. Make sure it\'s an exported Poll Position JSON.', 'error');
-    }
-    e.target.value = '';
+    } catch(err) { flash('settings-flash','Invalid file format.','error'); }
+    e.target.value='';
   };
   reader.readAsText(file);
 }
 
 function confirmImport() {
   if (!pendingImport) return;
-  const maxId = pendingImport.reduce(function(m, q) { return Math.max(m, q.id || 0); }, 0);
-  pendingImport.forEach(function(q, i) { if (!q.id) q.id = maxId + i + 1; });
-  saveQuestions(pendingImport);
-  pendingImport = null;
-  document.getElementById('import-preview').style.display = 'none';
-  renderQuestionList();
-  flash('settings-flash', 'Questions imported successfully.');
-  initGame();
+  var max = pendingImport.reduce(function(m,q){ return Math.max(m,q.id||0); }, 0);
+  pendingImport.forEach(function(q,i){ if(!q.id) q.id=max+i+1; });
+  saveQuestions(pendingImport); pendingImport=null;
+  document.getElementById('import-preview').style.display='none';
+  renderQuestionList(); flash('settings-flash','Questions imported.'); initGame();
 }
 
 function cancelImport() {
-  pendingImport = null;
-  document.getElementById('import-preview').style.display = 'none';
+  pendingImport=null; document.getElementById('import-preview').style.display='none';
 }
 
-/* ━━━━━━━━━━ BOOT ━━━━━━━━━━ */
+/* BOOT */
 initGame();
 </script>
 </body>
