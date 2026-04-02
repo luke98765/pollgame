@@ -431,6 +431,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin-bottom: 1re
    2. Replace everything between [ and ] below with the exported JSON
    3. Re-upload index.html to GitHub
 ═══════════════════════════════════════════════════ */
+// Increment this by 1 every time you update DEFAULT_QUESTIONS below.
+// This forces returning visitors to load the new questions instead of their cached version.
+var DEFAULT_VERSION = 1;
+
 var DEFAULT_QUESTIONS = [
   {
     "id": 1,
@@ -458,12 +462,20 @@ var DEFAULT_QUESTIONS = [
 /* ─── STORAGE ─── */
 function getQuestions() {
   try {
+    var storedVersion = parseInt(localStorage.getItem('pp_q_version') || '0');
     var raw = localStorage.getItem('pp_q');
-    if (!raw) { localStorage.setItem('pp_q', JSON.stringify(DEFAULT_QUESTIONS)); return DEFAULT_QUESTIONS; }
+    if (!raw || storedVersion !== DEFAULT_VERSION) {
+      localStorage.setItem('pp_q', JSON.stringify(DEFAULT_QUESTIONS));
+      localStorage.setItem('pp_q_version', String(DEFAULT_VERSION));
+      return DEFAULT_QUESTIONS;
+    }
     return JSON.parse(raw);
   } catch(e) { return DEFAULT_QUESTIONS; }
 }
-function saveQuestions(qs) { localStorage.setItem('pp_q', JSON.stringify(qs)); }
+function saveQuestions(qs) {
+  localStorage.setItem('pp_q', JSON.stringify(qs));
+  localStorage.setItem('pp_q_version', String(DEFAULT_VERSION));
+}
 function getPw()       { return localStorage.getItem('pp_pw')  || 'whiskey'; }
 function getSubtitle() { return localStorage.getItem('pp_sub') || 'How well do you know the numbers?'; }
 function getLeaderboard() { try { return JSON.parse(localStorage.getItem('pp_lb') || '[]'); } catch(e) { return []; } }
