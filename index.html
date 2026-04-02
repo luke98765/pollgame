@@ -281,6 +281,53 @@
     border-top: 1px solid var(--line);
   }
   .edit-form.open { display: block; }
+
+  /* ── USERNAME SCREEN ── */
+  .username-screen {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 2.5rem 2rem; text-align: center;
+  }
+  .username-screen h2 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin-bottom: .5rem; }
+  .username-screen p { font-size: 14px; color: var(--ink2); margin-bottom: 2rem; line-height: 1.5; }
+  .username-input-wrap { display: flex; gap: 8px; max-width: 340px; margin: 0 auto 1rem; }
+  .username-input-wrap input {
+    flex: 1; padding: 11px 14px; border: 1px solid var(--line); border-radius: 8px;
+    font-family: var(--sans); font-size: 15px; background: var(--bg); color: var(--ink);
+    outline: none; transition: border-color .15s; text-align: center;
+  }
+  .username-input-wrap input:focus { border-color: var(--accent); }
+  .username-err { font-size: 12px; color: var(--no); font-family: var(--mono); min-height: 16px; }
+  .start-btn {
+    padding: 11px 28px; background: var(--ink); color: var(--bg);
+    border: none; border-radius: 8px; font-family: var(--sans);
+    font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity .15s;
+  }
+  .start-btn:hover { opacity: .85; }
+
+  /* ── LEADERBOARD ── */
+  .lb-section { margin-top: 2rem; }
+  .lb-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+  .lb-title { font-family: var(--serif); font-size: 20px; font-weight: 400; }
+  .lb-sub { font-family: var(--mono); font-size: 11px; color: var(--ink3); }
+  .lb-table { width: 100%; border-collapse: collapse; }
+  .lb-table th { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: .5px; text-transform: uppercase; text-align: left; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .lb-table th:last-child { text-align: right; }
+  .lb-table td { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle; }
+  .lb-table td:last-child { text-align: right; font-family: var(--mono); font-weight: 500; }
+  .lb-table tr:last-child td { border-bottom: none; }
+  .lb-rank { font-family: var(--mono); font-size: 12px; color: var(--ink3); width: 28px; }
+  .lb-name { font-weight: 500; }
+  .lb-date { font-size: 12px; color: var(--ink3); font-family: var(--mono); }
+  .medal-1 { color: #b8860b; } .medal-2 { color: #808080; } .medal-3 { color: #8b5e3c; }
+  .lb-score-good { color: var(--yes); } .lb-score-ok { color: var(--accent); } .lb-score-bad { color: var(--no); }
+  .lb-empty { text-align: center; padding: 2rem; color: var(--ink3); font-size: 13px; font-family: var(--mono); }
+  .view-lb-btn {
+    width: 100%; padding: 11px; background: transparent; color: var(--ink2);
+    border: 1px solid var(--line); border-radius: 8px; font-family: var(--sans);
+    font-size: 14px; cursor: pointer; transition: all .15s; margin-top: 1rem;
+  }
+  .view-lb-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+
 </style>
 </head>
 <body>
@@ -296,8 +343,33 @@
 
   <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
 
+  <!-- USERNAME SCREEN -->
+  <div id="username-screen" class="username-screen">
+    <h2>Enter your name</h2>
+    <p>Your score will be saved to the leaderboard<br>when you finish all the questions.</p>
+    <div class="username-input-wrap">
+      <input type="text" id="username-input" placeholder="Your name" maxlength="20" onkeydown="if(event.key==='Enter')startGame()">
+    </div>
+    <div class="username-err" id="username-err"></div>
+    <br>
+    <button class="start-btn" onclick="startGame()">Start quiz →</button>
+    <div style="margin-top:1.5rem">
+      <button class="view-lb-btn" onclick="showLeaderboard()">View leaderboard</button>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD SCREEN -->
+  <div id="leaderboard-screen" style="display:none">
+    <div class="lb-header">
+      <div class="lb-title">Leaderboard</div>
+      <div class="lb-sub">lower score = better</div>
+    </div>
+    <div id="lb-content"></div>
+    <button class="view-lb-btn" onclick="backToStart()" style="margin-top:1.5rem">← Back</button>
+  </div>
+
   <!-- GAME AREA -->
-  <div id="game-area">
+  <div id="game-area" style="display:none">
     <div class="q-label" id="q-count"></div>
     <div class="question" id="q-text"></div>
     <div class="q-source" id="q-source"></div>
@@ -348,7 +420,10 @@
     <div class="score-unit">average points off</div>
     <div class="score-grade" id="score-grade"></div>
     <div class="score-rows" id="score-rows"></div>
-    <button class="restart-btn" onclick="restart()">Play again</button>
+    <div style="display:flex;gap:8px;margin-top:1.5rem">
+      <button class="restart-btn" style="flex:1" onclick="restart()">Play again</button>
+      <button class="restart-btn" style="flex:1;background:transparent;color:var(--accent);border:1.5px solid var(--accent)" onclick="showLeaderboard()">Leaderboard</button>
+    </div>
   </div>
 </div>
 
@@ -380,6 +455,7 @@
       <div class="admin-tabs">
         <button class="admin-tab active" onclick="switchTab('questions')">Questions</button>
         <button class="admin-tab" onclick="switchTab('add')">Add new</button>
+        <button class="admin-tab" onclick="switchTab('leaderboard')">Leaderboard</button>
         <button class="admin-tab" onclick="switchTab('settings')">Settings</button>
       </div>
 
@@ -415,7 +491,14 @@
         <button class="save-btn" onclick="addQuestion()">Add question</button>
       </div>
 
-      <!-- TAB: SETTINGS -->
+      <!-- TAB: LEADERBOARD -->
+      <div class="tab-panel" id="tab-leaderboard">
+        <div class="flash" id="lb-flash"></div>
+        <div id="admin-lb-content"></div>
+        <div style="margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1.25rem">
+          <button class="danger-btn" onclick="clearLeaderboard()">Clear all scores</button>
+        </div>
+      </div>
       <div class="tab-panel" id="tab-settings">
         <div class="flash" id="settings-flash"></div>
 
@@ -426,7 +509,7 @@
               <input class="form-input" id="new-pw" type="password" placeholder="New password">
               <button class="inline-btn" onclick="changePassword()">Update</button>
             </div>
-            <div class="form-hint">Default password: admin</div>
+            <div class="form-hint">Default password: whiskey</div>
           </div>
         </div>
 
@@ -522,30 +605,112 @@ function getQuestions() {
   return JSON.parse(raw);
 }
 function saveQuestions(qs) { localStorage.setItem('pp_questions', JSON.stringify(qs)); }
-function getPw() { return localStorage.getItem('pp_pw') || 'admin'; }
+function getPw() { return localStorage.getItem('pp_pw') || 'whiskey'; }
 function getSubtitle() { return localStorage.getItem('pp_subtitle') || 'How well do you know the numbers?'; }
 
+/* ━━━━━━━━━━ LEADERBOARD STORAGE ━━━━━━━━━━ */
+function getLeaderboard() {
+  try { return JSON.parse(localStorage.getItem('pp_leaderboard') || '[]'); } catch(e) { return []; }
+}
+function saveLeaderboard(lb) { localStorage.setItem('pp_leaderboard', JSON.stringify(lb)); }
+
+function addToLeaderboard(name, avg, total, numQuestions) {
+  const lb = getLeaderboard();
+  lb.push({
+    name: name,
+    avg: avg,
+    total: total,
+    questions: numQuestions,
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  });
+  lb.sort(function(a, b) { return a.avg - b.avg; });
+  saveLeaderboard(lb);
+}
+
+function renderLeaderboardHTML(lb, showDelete) {
+  if (lb.length === 0) return '<div class="lb-empty">No scores yet. Be the first!</div>';
+  const medals = ['medal-1','medal-2','medal-3'];
+  return '<table class="lb-table"><thead><tr><th>#</th><th>Name</th><th>Date</th><th>Avg off</th></tr></thead><tbody>' +
+    lb.map(function(e, i) {
+      const rankCls = i < 3 ? medals[i] : '';
+      const rankLabel = i === 0 ? '1st' : i === 1 ? '2nd' : i === 2 ? '3rd' : (i+1)+'th';
+      const scoreCls = e.avg <= 3 ? 'lb-score-good' : e.avg <= 10 ? 'lb-score-ok' : 'lb-score-bad';
+      const del = showDelete ? '<button onclick="deleteEntry('+i+')" style="margin-left:8px;font-size:10px;font-family:var(--mono);padding:2px 6px;border:1px solid var(--line);border-radius:4px;cursor:pointer;background:transparent;color:var(--ink3)">×</button>' : '';
+      return '<tr><td class="lb-rank ' + rankCls + '">' + rankLabel + '</td><td class="lb-name">' + e.name + del + '</td><td class="lb-date">' + e.date + '</td><td class="' + scoreCls + '">' + e.avg.toFixed(1) + 'pt</td></tr>';
+    }).join('') +
+  '</tbody></table>';
+}
+
+function renderAdminLeaderboard() {
+  const lb = getLeaderboard();
+  document.getElementById('admin-lb-content').innerHTML = renderLeaderboardHTML(lb, true);
+}
+
+function deleteEntry(idx) {
+  const lb = getLeaderboard();
+  lb.splice(idx, 1);
+  saveLeaderboard(lb);
+  renderAdminLeaderboard();
+  flash('lb-flash', 'Entry removed.');
+}
+
+function clearLeaderboard() {
+  if (!confirm('Clear all leaderboard scores? Cannot be undone.')) return;
+  localStorage.removeItem('pp_leaderboard');
+  renderAdminLeaderboard();
+  flash('lb-flash', 'Leaderboard cleared.');
+}
+
 /* ━━━━━━━━━━ GAME STATE ━━━━━━━━━━ */
-let current = 0, guesses = [], questions = [];
+let current = 0, guesses = [], questions = [], currentUser = '';
 
 function initGame() {
   questions = getQuestions();
   document.getElementById('meta-sub').textContent = getSubtitle();
   current = 0; guesses = [];
+  document.getElementById('scoreboard').classList.remove('show');
+  document.getElementById('game-area').style.display = 'none';
+  document.getElementById('leaderboard-screen').style.display = 'none';
 
   if (questions.length === 0) {
-    document.getElementById('game-area').style.display = 'none';
+    document.getElementById('username-screen').style.display = 'none';
     document.getElementById('empty-state').style.display = 'block';
-    document.getElementById('scoreboard').classList.remove('show');
     return;
   }
-  document.getElementById('game-area').style.display = 'block';
   document.getElementById('empty-state').style.display = 'none';
-  document.getElementById('scoreboard').classList.remove('show');
+  document.getElementById('username-screen').style.display = 'block';
 
   const slider = document.getElementById('slider');
-  slider.oninput = () => { document.getElementById('guess-val').textContent = slider.value + '%'; };
+  slider.oninput = function() { document.getElementById('guess-val').textContent = slider.value + '%'; };
+}
+
+function startGame() {
+  const nameInput = document.getElementById('username-input');
+  const name = nameInput.value.trim();
+  if (!name) {
+    document.getElementById('username-err').textContent = 'Please enter a name to continue.';
+    nameInput.focus();
+    return;
+  }
+  currentUser = name;
+  document.getElementById('username-err').textContent = '';
+  document.getElementById('username-screen').style.display = 'none';
+  document.getElementById('game-area').style.display = 'block';
   loadQ(0);
+}
+
+function showLeaderboard() {
+  document.getElementById('username-screen').style.display = 'none';
+  document.getElementById('game-area').style.display = 'none';
+  document.getElementById('scoreboard').classList.remove('show');
+  document.getElementById('leaderboard-screen').style.display = 'block';
+  const lb = getLeaderboard();
+  document.getElementById('lb-content').innerHTML = renderLeaderboardHTML(lb, false);
+}
+
+function backToStart() {
+  document.getElementById('leaderboard-screen').style.display = 'none';
+  document.getElementById('username-screen').style.display = 'block';
 }
 
 function loadQ(i) {
@@ -602,31 +767,30 @@ function showScore() {
   const sc = document.getElementById('scoreboard');
   sc.classList.add('show');
 
-  const total = guesses.reduce((s, g, i) => s + Math.abs(g - questions[i].answer), 0);
-  const avg = (total / guesses.length).toFixed(1);
-  document.getElementById('final-score').textContent = avg;
+  const total = guesses.reduce(function(s, g, i) { return s + Math.abs(g - questions[i].answer); }, 0);
+  const avg = parseFloat((total / guesses.length).toFixed(1));
+  document.getElementById('final-score').textContent = avg.toFixed(1);
 
   const grade = avg <= 3 ? 'Polling expert 🎯' : avg <= 7 ? 'Sharp instincts 📊' : avg <= 15 ? 'Room to improve 📰' : 'Back to the newsroom 📺';
   document.getElementById('score-grade').textContent = grade;
 
-  document.getElementById('score-rows').innerHTML = guesses.map((g, i) => {
+  addToLeaderboard(currentUser, avg, total, guesses.length);
+
+  document.getElementById('score-rows').innerHTML = guesses.map(function(g, i) {
     const diff = Math.abs(g - questions[i].answer);
     const cls = diff <= 3 ? 'good' : diff <= 10 ? 'ok' : 'bad';
     const short = questions[i].q.length > 55 ? questions[i].q.substring(0, 55) + '…' : questions[i].q;
-    return `<div class="score-row">
-      <span class="sr-q">${short}</span>
-      <span class="sr-guess">${g}%</span>
-      <span class="sr-ans">→ ${questions[i].answer}%</span>
-      <span class="diff ${cls}">${diff === 0 ? '✓ 0' : diff + 'pt'}</span>
-    </div>`;
+    return '<div class="score-row"><span class="sr-q">' + short + '</span><span class="sr-guess">' + g + '%</span><span class="sr-ans">→ ' + questions[i].answer + '%</span><span class="diff ' + cls + '">' + (diff === 0 ? '✓ 0' : diff + 'pt') + '</span></div>';
   }).join('');
 }
 
 function restart() {
   current = 0; guesses = [];
-  document.getElementById('game-area').style.display = 'block';
   document.getElementById('scoreboard').classList.remove('show');
-  loadQ(0);
+  document.getElementById('leaderboard-screen').style.display = 'none';
+  document.getElementById('username-screen').style.display = 'block';
+  document.getElementById('username-input').value = '';
+  document.getElementById('prog').style.width = '0%';
 }
 
 /* ━━━━━━━━━━ ADMIN OVERLAY ━━━━━━━━━━ */
@@ -673,12 +837,13 @@ function checkPw() {
 
 /* ━━━━━━━━━━ ADMIN TABS ━━━━━━━━━━ */
 function switchTab(name) {
+  const names = ['questions','add','leaderboard','settings'];
   document.querySelectorAll('.admin-tab').forEach((t, i) => {
-    const names = ['questions','add','settings'];
     t.classList.toggle('active', names[i] === name);
   });
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'leaderboard') renderAdminLeaderboard();
   hideFlash();
 }
 
